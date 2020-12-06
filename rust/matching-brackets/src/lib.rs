@@ -1,24 +1,21 @@
 pub fn brackets_are_balanced(string: &str) -> bool {
-    let (mut bracket, mut braces, mut parentheses,mut brackets) = (0i32, 0i32, 0i32,String::new());
-    string.chars().for_each(|x| match x {
-        '{' => brackets.push(x),
-        '}' => brackets.push(x),
-        '[' => brackets.push(x),
-        ']' => brackets.push(x),
-        '(' => brackets.push(x),
-        ')' => brackets.push(x),
-        _ => (),
-    });
-    for c in brackets.chars() {
+    let mut counter:Vec<char> = Vec::new();
+    for c in string.chars(){
         match c {
-            '{' => braces += 1,
-            '}' => braces += -1,
-            '[' => bracket += 1,
-            ']' => bracket += -1,
-            '(' => parentheses += 1,
-            ')' => parentheses += -1,
-            _ => (),
+            '[' | '{' | '(' => counter.push(c),
+            ']' => if counter.pop() != Some('[') {return false },
+            '}' => if counter.pop() != Some('{') {return false },
+            ')' => if counter.pop() != Some('(') {return false },
+            _ => {}
         }
     }
-    bracket == 0 && braces == 0 && parentheses == 0
+    /*string.chars().for_each(|c| //It didn't work, but it would be cool if it worked
+        match c {
+            '[' | '{' | '(' => counter.push(c),
+            ']' => if counter.pop() != Some('[') {return false },
+            '}' => if counter.pop() != Some('{') {return false },
+            ')' => if counter.pop() != Some('(') {return false },
+            _ => {}
+    });*/
+    counter.is_empty()
 }
