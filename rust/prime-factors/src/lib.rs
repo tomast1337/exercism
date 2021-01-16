@@ -15,12 +15,17 @@ pub fn factors(n: u64) -> Vec<u64> {
     }
     return result;
 }
-fn is_prime(n: u64) -> bool {
-    let mut divisors_count:u64 = 0;
-    for i in (2..n).rev() {
+fn is_prime(n: u64) -> bool { 
+    if n % 2 == 0 {
+        return n == 2;
+    }
+    if n % 3 == 0 {
+        return false;
+    }
+    for i in 3..(n as f64).sqrt() as u64 {
         if n % i == 0 {
-            divisors_count += 1;
+            return false
         }
     }
-    return divisors_count == 0;
+    true
 }
