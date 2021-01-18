@@ -22,16 +22,8 @@ fn prime_factors(mut number: u64) -> Vec<u64> {
     result
 }
 fn is_prime(n: u64) -> bool {
-    if n % 2 == 0 {
-        return n == 2;
-    }
-    if n % 3 == 0 {
-        return n == 3;
-    }
-    for i in 3..(n as f64).sqrt() as u64 {
-        if n % i == 0 {
-            return false
-        }
-    }
-    true
+    (2..n)
+    .take_while(|divisor| divisor * divisor <= n)
+    .all(|divisor| n % divisor != 0)
 }
+
