@@ -46,7 +46,7 @@ fn is_prime_even_check(n: u64) -> bool {
         return n == 2;
     }
     if n % 3 == 0 {
-        return false;
+        return n == 3;
     }
     let mut counter = 0;
     for i in (2..n + 1).rev() {
@@ -62,7 +62,7 @@ fn is_prime_better_division(n: u64) -> bool {
         return n == 2;
     }
     if n % 3 == 0 {
-        return false;
+        return n == 3;
     }
     let mut counter = 0;
     let mut divisor = 1;
@@ -86,7 +86,7 @@ fn is_prime_great_root(n: u64) -> bool {
         return n == 2;
     }
     if n % 3 == 0 {
-        return false;
+        return n == 3;
     }
     for i in 3..(n as f64).sqrt() as u64 {
         if n % i == 0 {
