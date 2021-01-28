@@ -1,0 +1,53 @@
+CREATE DATABASE BdAlocarH;
+USE BdAlocarH;
+
+CREATE TABLE IF NOT EXISTS `Funcionario` (
+  `Matricula` int(11) NOT NULL,
+  `Nome` varchar(50) NOT NULL,
+  `Cargo` varchar(20) NOT NULL, 
+  `Salario` float NOT NULL,
+  `Ativo` tinyint(1) NOT NULL,
+  PRIMARY KEY (`Matricula`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `Projeto` (
+  `Codigo` int(11) NOT NULL,
+  `Descricao` varchar(50) NOT NULL,  
+  PRIMARY KEY (`Codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `Aloca` (
+  `Matricula` int(11) unsigned NOT NULL, 
+  `Codigo` int(11) unsigned NOT NULL,
+  `Descricao` varchar(40) NOT NULL,
+  `Constroe` varchar(20) NOT NULL, 
+  `Data` varchar(11) NOT NULL,
+  `Hora` varchar(6) NOT NULL, 
+  `Financiado` tinyint(1) NOT NULL,
+   PRIMARY KEY (`Matricula`,`Codigo`),
+   KEY `Codigo` (`Codigo`),
+   CONSTRAINT `Matricula` FOREIGN KEY (`Matricula`) REFERENCES `Funcionario` (`Matricula`),
+  CONSTRAINT `Codigo` FOREIGN KEY (`Codigo`) REFERENCES    `Projeto` (`Codigo`)
+ ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `Financiado` (
+  `Matricula` int(11) unsigned NOT NULL, 
+  `Codigo` int(11) unsigned NOT NULL,
+  `Duracao` int(11) NOT NULL,  
+   PRIMARY KEY (`Matricula`,`Codigo`),
+   KEY `Codigo` (`Codigo`),
+   CONSTRAINT `Matricula` FOREIGN KEY (`Matricula`) REFERENCES `Aloca` (`Matricula`),
+   CONSTRAINT `Codigo` FOREIGN KEY (`Codigo`) REFERENCES    `Aloca` (`Codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `NFinanciado` (
+  `Matricula` int(11) unsigned NOT NULL, 
+  `Codigo` int(11) unsigned NOT NULL,
+  `Tipo` varchar(9) NOT NULL,   
+   PRIMARY KEY (`Matricula`,`Codigo`),
+   KEY `Codigo` (`Codigo`),
+   CONSTRAINT `Matricula` FOREIGN KEY (`Matricula`) REFERENCES `Aloca` (`Matricula`),
+   CONSTRAINT `Codigo` FOREIGN KEY (`Codigo`) REFERENCES    `Aloca` (`Codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+

@@ -1,0 +1,15 @@
+CREATE DATABASE BdAlocar;
+USE BdAlocar;
+
+
+CREATE TABLE `Aloca` (
+  `Matricula` int(11) unsigned NOT NULL, 
+  `Codigo` int(11) unsigned NOT NULL,
+  `Descricao` varchar(40) NOT NULL,
+  `Duracao` int(11) NOT NULL,
+  `Financiado` tinyint(1) NOT NULL,
+  PRIMARY KEY (`Codigo`)
+);
+
+
+

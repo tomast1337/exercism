@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+ <session-factory>
+
+ 		<property name="hibernate.connection.driver_class">
+ 				com.mysql.jdbc.Driver</property>
+
+		<property name="hibernate.connection.url">
+						jdbc:mysql://localhost:3306/Loja?createDatabaseIfNotExist=true</property>
+
+		<property name="hibernate.dialect">
+			org.hibernate.dialect.MySQLDialect</property>
+
+
+        <property name="hibernate.connection.username">usuario</property>
+        <property name="connection.password">usuario</property>
+
+		<property name="hibernate.hbm2ddl.auto">create</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">true</property>
+
+        <mapping class="modelo.Cliente"/>
+		<mapping class="modelo.Compra"/>
+		<mapping class="modelo.Estoque"/>
+		<mapping class="modelo.Fornecedor"/>
+		<mapping class="modelo.Funcionario"/>
+		<mapping class="modelo.ItensCompra"/>
+		<mapping class="modelo.ItensVenda"/>
+		<mapping class="modelo.Produto"/>
+		<mapping class="modelo.Venda"/>
+
+    </session-factory>
+
+</hibernate-configuration>
