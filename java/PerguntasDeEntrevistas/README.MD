@@ -1,5 +1,5 @@
 # Perguntas de entrevista
-As Questões foram resolvidas da maneira que ocupe menos linhas possíveis isso porque imaginei que em uma situação de entrevista não há muito tempo, se algumas coisas fosse ser implementadas para algo permanente muitos desses algoritmos seriam feitos de outra forma
+As Questões foram resolvidas da maneira que ocupe menos linhas possíveis isso porque imaginei que em uma situação de entrevista não há muito tempo, se algumas coisas fossem ser implementadas para algo permanente muitos desses algoritmos seriam feitos de outra forma
 ## Questões Ultra Fáceis:
 1. Imprima seu nome na tela.
  
