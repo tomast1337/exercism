@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void print_conjunto(char *conjunto, int tamanho){
-    putchar('{');
+    printf("{");
     for (int i = 0; i < tamanho; i++){
         if(i == tamanho-1){
             putchar(conjunto[i]);
@@ -14,42 +14,42 @@ void print_conjunto(char *conjunto, int tamanho){
 }
 
 void uniao_disjunta(char *conjunto1, char *conjunto2, int tamanho1, int tamanho2){
-    char uniao[tamanho1 + tamanho2];
+    char resultado[tamanho1 + tamanho2];
     int tamanhoReal = 0;
-    //Uniao
-    for (int i = 0; i < tamanho1; i++){
-        uniao[i] = conjunto1[i];
-        tamanhoReal++;
+    for(int i = 0; i < tamanho1; i++){
+        for(int j = 0; j <tamanho2; j++){
+            if(conjunto1[i] == conjunto2[j]){
+                break;
+            }else if(j == (tamanho2-1)){
+            resultado[tamanhoReal] = conjunto1[i];
+            tamanhoReal++;
+        }
+        }
     }
-
-    for (int i = tamanho1; i < tamanho1 + tamanho2; i++){
-        uniao[i] = conjunto2[i - tamanho1];
-        tamanhoReal++;
-    }
-    //remover elementos duplicados
     for (int i = 0; i < tamanhoReal; i++){
         for (int j = i + 1; j < tamanhoReal; j++){
-            if (uniao[i] == uniao[j]){
+            if (resultado[i] == resultado[j]){
                 for (int k = j; k < tamanhoReal; k++){
-                    uniao[k] = uniao[k + 1];
+                    resultado[k] = resultado[k + 1];
                 }
                 tamanhoReal--;
                 j--;
             }
         }
     }
-    
-    print_conjunto(uniao, tamanhoReal);
+    print_conjunto(resultado, tamanhoReal);
 }
 
 int main(){
-    char conjunto1[10] = {'1', 'h', '4', 'l', '5', '1', '2', 'b', '7', 'z'};
-    char conjunto2[12] = {'1', '7', '6', 'u', '1', 'i', '4', 'j', 'e', '8','p','o'};
-    printf("\n\n\t\tA = ");
-    print_conjunto(conjunto1, 10);
-    printf("\n\t\tB = ");
+    char conjunto1[12] = {'2','a','5','v','8','f','5','a','3','a','5','a'};
+    printf("\nA = ");
+    print_conjunto(conjunto1, 12);
+    
+    char conjunto2[12] = {'a','5','c','2','g','8','t','r','7','a','4','a'};
+    printf("\nB = ");
     print_conjunto(conjunto2, 12);
-    printf("\n\t\tA U B = ");
-    uniao_disjunta(conjunto1, conjunto2, 10, 12);
-    printf("\n\n\n");
+    
+    printf("\nuniao_disjunta(A,B) = ");
+    uniao_disjunta(conjunto1, conjunto2, 12, 12);
+    printf("\n");
 }
