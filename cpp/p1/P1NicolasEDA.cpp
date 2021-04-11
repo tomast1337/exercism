@@ -125,7 +125,9 @@ float gerarNotaFiscal(int nCliente){
         while (restauranteSabores.cliente[nCliente].cabeca != NULL){
             total += restauranteSabores.cliente[nCliente].cabeca->valor;
             printf("%d\t%.2f\n",restauranteSabores.cliente[nCliente].cabeca->codigo,restauranteSabores.cliente[nCliente].cabeca->valor);
+            ItemPtr cabecaAntiga = restauranteSabores.cliente[nCliente].cabeca;
             restauranteSabores.cliente[nCliente].cabeca = restauranteSabores.cliente[nCliente].cabeca->proximo;
+            delete cabecaAntiga;
         }
     }
     printf("Total a pagar: %.2f\n",total);
