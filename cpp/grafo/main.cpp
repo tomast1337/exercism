@@ -46,6 +46,7 @@ struct Lista {
             if (anterior->proximo != nullptr) {
                 Item<char> *antigo = anterior->proximo;
                 anterior->proximo = anterior->proximo->proximo;
+
                 delete antigo;
             }
         }
@@ -177,6 +178,11 @@ struct Grafo {
 
     void removerVertice(char vertice) {
         if (existe(vertice)) {
+            Item<char>* vizinho = this->getVizinhos(vertice)->cabeca->proximo;
+            while(vizinho != nullptr){
+                removerVizinhaca(vizinho->dado,vertice);
+                vizinho = vizinho->proximo;
+            }
             Item<Lista<char>> *listaVertice = getLista(vertice);
             listaListasAdjacencia.remover(listaVertice);
             numeroVertices--;
@@ -231,14 +237,12 @@ struct Grafo {
 int main() {
     Grafo *grafo = new Grafo;
 
-    grafo->adicionarVertice('E');
-    grafo->imprimirGrafo();
-
-
     grafo->adicionarVertice('A');
     grafo->adicionarVertice('B');
     grafo->adicionarVertice('C');
     grafo->adicionarVertice('D');
+    grafo->adicionarVertice('E');
+    grafo->imprimirGrafo();
 
     std::cout << std::endl;
     grafo->AdicionaVizinhaca('B', 'A');
@@ -266,5 +270,24 @@ int main() {
     grafo->imprimirGrafo();
 
     std::cout << std::endl;
+    grafo->AdicionaVizinhaca('C', 'G');
+    grafo->AdicionaVizinhaca('C', 'H');
+    grafo->AdicionaVizinhaca('C', 'K');
+    grafo->AdicionaVizinhaca('C', 'B');
+    grafo->AdicionaVizinhaca('C', 'C');
 
+    std::cout << std::endl;
+    grafo->imprimirGrafo();
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+    grafo->removerVertice('C');
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+    grafo->removerVertice('G');
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+    grafo->imprimirGrafo();
 }
