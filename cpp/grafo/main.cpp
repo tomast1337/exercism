@@ -23,7 +23,7 @@ struct Lista {
     void remover(Item<Struct> *item) {
         if (item == cabeca) {
             Item<Struct> *antigo = cabeca;
-            cabeca = cabeca->proximo == nullptr ? cabeca = nullptr : cabeca->proximo;;
+            cabeca = cabeca->proximo == nullptr ? cabeca = nullptr : cabeca->proximo;
             delete antigo;
         } else {
             Item<Struct> *anterior = cabeca;
@@ -40,7 +40,7 @@ struct Lista {
     void remover(char item) {
         if (item == cabeca->dado) {
             Item<char> *antigo = cabeca;
-            cabeca = cabeca->proximo == nullptr ? cabeca = nullptr : cabeca->proximo;;
+            cabeca = cabeca->proximo == nullptr ? cabeca = nullptr : cabeca->proximo;
             delete antigo;
         } else {
             Item<char> *anterior = cabeca;
