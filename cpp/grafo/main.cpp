@@ -56,6 +56,15 @@ struct Lista {
             ultimo = ultimo->proximo;
         return ultimo;
     }
+
+    bool possui(Item<char> item) {
+        Item<Struct> *ultimo = cabeca;
+        while (ultimo->proximo != nullptr) {
+            if (ultimo->dado == item.dado) return true;
+            ultimo = ultimo->proximo;
+        }
+        return false;
+    }
 };
 
 struct Grafo {
@@ -93,9 +102,9 @@ struct Grafo {
 
     void imprimirAdjacencia(char vertice) {
         if (existe(vertice)) {
-            Item<Lista<char>>* listaVerice = getLista(vertice);
-            if(listaVerice->proximo == nullptr){
-                std::cout <<vertice<<": sem vizinhos";
+            Item<Lista<char>> *listaVerice = getLista(vertice);
+            if (listaVerice->proximo == nullptr) {
+                std::cout << vertice << ": sem vizinhos";
             } else {
                 Item<char> *vizinho = getVizinhos(vertice)->cabeca;
                 std::cout << vizinho->dado << ": ";
@@ -165,26 +174,44 @@ struct Grafo {
     }
 
     void AdicionaVizinhaca(char verticeA, char verticeB) {
-        bool existeA = existe(verticeA), existeB = existe(verticeB);
-        if (existeA && existeB) {
+        if (existe(verticeA) && existe(verticeB)) {
             if (verticeA == verticeB) {
                 getLista(verticeA)->dado.inserir(new Item<char>(verticeB));
                 std::cout << verticeA << " é vizinho de " << verticeB << std::endl;
             } else {
                 getLista(verticeB)->dado.inserir(new Item<char>(verticeA));
                 getLista(verticeA)->dado.inserir(new Item<char>(verticeB));
-                std::cout << verticeA << " e " << verticeB << " são vizinhos" << std::endl;
+                std::cout << verticeA << " e " << verticeB << " agora são vizinhos" << std::endl;
             }
         } else {
-            std::cout << "Não é possível, um dos vertices ou as duas não existem " << std::endl;
+            std::cout << "Não é possível relacionar " << verticeA << " e " << verticeB
+                      << " , um dos vertices ou os dois não existem " << std::endl;
         }
     }
 
-    void removerVizinhaca(){
+    void removerVizinhaca(char verticeA, char verticeB) {
+        if (existe(verticeA) && existe(verticeB)) {
+            if (testeVizinhaca(verticeA, verticeB)) {
+
+            } else
+                std::cout << "Não é possível remover relação entre " << verticeA << " e " << verticeB
+                          << ", os vertices não compartilhão um vizinhança" << std::endl;
+        } else
+            std::cout << "Não é possível remover relação entre " << verticeA << " e " << verticeB
+                      << " , um dos vertices ou os dois não existem " << std::endl;
 
     }
 
-    bool TesteVizinhaca(char verticeA, char verticeB) {
+    bool testeVizinhaca(char verticeA, char verticeB) {
+        if (existe(verticeA) && existe(verticeB)) {
+            Lista<char> *vizinhosA = getVizinhos(verticeA);
+            Lista<char> *vizinhosB = getVizinhos(verticeB);
+            std::cout << verticeA << " e " << verticeB << " são vizinhos" << std::endl;
+            return vizinhosA->possui(verticeB) && vizinhosB->possui(verticeA);
+        } else {
+            std::cout << verticeA << " e " << verticeB << " não são vizinhos" << std::endl;
+            return false;
+        }
     }
 };
 
@@ -225,4 +252,6 @@ int main() {
     grafo->imprimirGrafo();
 
     std::cout << std::endl;
+
+
 }
