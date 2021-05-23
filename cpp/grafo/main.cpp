@@ -10,11 +10,6 @@ struct Item {
     Item(Struct dado) {
         this->dado = dado;
     }
-
-    Item(Struct dado, Item *proximo) {
-        this->proximo = proximo;
-        this->dado = dado;
-    }
 };
 
 template<typename Struct>
@@ -34,6 +29,24 @@ struct Lista {
             if (anterior->proximo != nullptr) {
                 anterior->proximo = anterior->proximo->proximo;
                 delete item;
+            }
+        }
+    }
+
+    void remover(char item) {
+        if (item == cabeca->dado) {
+            Item<char> *antigo = cabeca;
+            cabeca = cabeca->proximo == nullptr ? cabeca = nullptr : cabeca->proximo;;
+            delete antigo;
+        } else {
+            Item<char> *anterior = cabeca;
+            while (anterior->proximo != nullptr && anterior->proximo->dado != item) {
+                anterior = anterior->proximo;
+            }
+            if (anterior->proximo != nullptr) {
+                Item<char> *antigo = anterior->proximo;
+                anterior->proximo = anterior->proximo->proximo;
+                delete antigo;
             }
         }
     }
@@ -192,14 +205,14 @@ struct Grafo {
     void removerVizinhaca(char verticeA, char verticeB) {
         if (existe(verticeA) && existe(verticeB)) {
             if (testeVizinhaca(verticeA, verticeB)) {
-
+                getLista(verticeA)->dado.remover(verticeB);
+                getLista(verticeB)->dado.remover(verticeA);
             } else
                 std::cout << "Não é possível remover relação entre " << verticeA << " e " << verticeB
                           << ", os vertices não compartilhão um vizinhança" << std::endl;
         } else
             std::cout << "Não é possível remover relação entre " << verticeA << " e " << verticeB
                       << " , um dos vertices ou os dois não existem " << std::endl;
-
     }
 
     bool testeVizinhaca(char verticeA, char verticeB) {
@@ -247,11 +260,11 @@ int main() {
     grafo->AdicionaVizinhaca('G', 'D');
     grafo->AdicionaVizinhaca('G', 'E');
     grafo->AdicionaVizinhaca('H', 'H');
+    grafo->removerVizinhaca('A','B');
 
     std::cout << std::endl;
     grafo->imprimirGrafo();
 
     std::cout << std::endl;
-
 
 }
