@@ -67,6 +67,18 @@ struct Grafo {
         this->listaListasAdjacencia = *new Lista<Lista<char>>;
     }
 
+    Item<Lista<char>> *getLista(char vertice) {
+        if (existe(vertice)) {
+            Item<Lista<char>> *ultimo = listaListasAdjacencia.cabeca;
+            while (ultimo != nullptr) {
+                if (ultimo->dado.cabeca->dado == vertice)
+                    return ultimo;
+                ultimo = ultimo->proximo;
+            }
+        } else
+            return nullptr;
+    }
+
     Lista<char> *getVizinhos(char vertice) {
         if (existe(vertice)) {
             Item<Lista<char>> *ultimo = listaListasAdjacencia.cabeca;
@@ -81,10 +93,11 @@ struct Grafo {
 
     void imprimirAdjacencia(char vertice) {
         if (existe(vertice)) {
-            Item<char> *vizinho = getVizinhos(vertice)->cabeca;
-            if (vizinho->proximo == nullptr) {
-                std::cout << "sem vizinhos";
+            Item<Lista<char>>* listaVerice = getLista(vertice);
+            if(listaVerice->proximo == nullptr){
+                std::cout <<vertice<<": sem vizinhos";
             } else {
+                Item<char> *vizinho = getVizinhos(vertice)->cabeca;
                 std::cout << vizinho->dado << ": ";
                 vizinho = vizinho->proximo;
                 while (vizinho != nullptr) {
@@ -101,7 +114,7 @@ struct Grafo {
     void imprimirGrafo() {
         std::cout << "Imprimindo grafo" << std::endl;
         if (listaListasAdjacencia.cabeca != nullptr) {
-            Item<Lista<char>>* vertice = listaListasAdjacencia.cabeca;
+            Item<Lista<char>> *vertice = listaListasAdjacencia.cabeca;
             while (vertice != nullptr) {
                 imprimirAdjacencia(vertice->dado.cabeca->dado);
                 std::cout << std::endl;
@@ -133,31 +146,42 @@ struct Grafo {
                 ultimo->proximo = novo;
             }
             numeroVertices++;
-            std::cout << "Adicionado vertice:" << vertice << std::endl;
+            std::cout << "Adicionado vértice:" << vertice << std::endl;
         } else {
-            std::cout << "Vértice:" << vertice << " já existe" << std::endl;
+            std::cout << "Vértice:" << vertice << " já existe, não pode ser adicionado" << std::endl;
         }
 
     }
 
     void removerVertice(char vertice) {
-        numeroVertices--;
+        if (existe(vertice)) {
+            Item<Lista<char>> *listaVertice = getLista(vertice);
+            listaListasAdjacencia.remover(listaVertice);
+            numeroVertices--;
+            std::cout << "Removido vértice:" << vertice << std::endl;
+        } else {
+            std::cout << "Vértice:" << vertice << " não existe, não pode ser removido" << std::endl;
+        }
     }
 
     void AdicionaVizinhaca(char verticeA, char verticeB) {
         bool existeA = existe(verticeA), existeB = existe(verticeB);
         if (existeA && existeB) {
             if (verticeA == verticeB) {
-                getVizinhos(verticeA)->inserir(new Item<char>(verticeB));
+                getLista(verticeA)->dado.inserir(new Item<char>(verticeB));
                 std::cout << verticeA << " é vizinho de " << verticeB << std::endl;
             } else {
-                getVizinhos(verticeA)->inserir(new Item<char>(verticeB));
-                getVizinhos(verticeB)->inserir(new Item<char>(verticeA));
+                getLista(verticeB)->dado.inserir(new Item<char>(verticeA));
+                getLista(verticeA)->dado.inserir(new Item<char>(verticeB));
                 std::cout << verticeA << " e " << verticeB << " são vizinhos" << std::endl;
             }
         } else {
             std::cout << "Não é possível, um dos vertices ou as duas não existem " << std::endl;
         }
+    }
+
+    void removerVizinhaca(){
+
     }
 
     bool TesteVizinhaca(char verticeA, char verticeB) {
@@ -166,28 +190,39 @@ struct Grafo {
 
 int main() {
     Grafo *grafo = new Grafo;
+
+    grafo->adicionarVertice('E');
+    grafo->imprimirGrafo();
+
+
     grafo->adicionarVertice('A');
     grafo->adicionarVertice('B');
     grafo->adicionarVertice('C');
     grafo->adicionarVertice('D');
-    grafo->adicionarVertice('E');
+
     std::cout << std::endl;
     grafo->AdicionaVizinhaca('B', 'A');
     grafo->AdicionaVizinhaca('C', 'D');
     grafo->AdicionaVizinhaca('A', 'A');
     grafo->AdicionaVizinhaca('C', 'C');
+
     std::cout << std::endl;
     grafo->imprimirGrafo();
+
     std::cout << std::endl;
     grafo->adicionarVertice('G');
     grafo->adicionarVertice('H');
     grafo->adicionarVertice('K');
+
     std::cout << std::endl;
     grafo->AdicionaVizinhaca('G', 'A');
     grafo->AdicionaVizinhaca('G', 'B');
     grafo->AdicionaVizinhaca('G', 'D');
     grafo->AdicionaVizinhaca('G', 'E');
+    grafo->AdicionaVizinhaca('H', 'H');
+
     std::cout << std::endl;
     grafo->imprimirGrafo();
+
     std::cout << std::endl;
 }
