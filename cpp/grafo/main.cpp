@@ -1,3 +1,7 @@
+/*
+ * Nicolas Vycas Nery
+ * 23/05/2020
+ */
 #include <iostream>
 
 template<typename Struct>
@@ -178,9 +182,9 @@ struct Grafo {
 
     void removerVertice(char vertice) {
         if (existe(vertice)) {
-            Item<char>* vizinho = this->getVizinhos(vertice)->cabeca->proximo;
-            while(vizinho != nullptr){
-                removerVizinhaca(vizinho->dado,vertice);
+            Item<char> *vizinho = this->getVizinhos(vertice)->cabeca->proximo;
+            while (vizinho != nullptr) {
+                removerVizinhaca(vizinho->dado, vertice);
                 vizinho = vizinho->proximo;
             }
             Item<Lista<char>> *listaVertice = getLista(vertice);
@@ -264,7 +268,7 @@ int main() {
     grafo->AdicionaVizinhaca('G', 'D');
     grafo->AdicionaVizinhaca('G', 'E');
     grafo->AdicionaVizinhaca('H', 'H');
-    grafo->removerVizinhaca('A','B');
+    grafo->removerVizinhaca('A', 'B');
 
     std::cout << std::endl;
     grafo->imprimirGrafo();
