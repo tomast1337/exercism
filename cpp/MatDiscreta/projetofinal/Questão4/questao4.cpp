@@ -14,8 +14,7 @@ struct Cadeia{
     }
     // Método Imprime a Cadeia
     void printCadeia(){
-        for(int i = 0;i < this->tamanho;i++)
-            std::cout<<this->cadeia[i];
+        std::cout<<this->cadeia;
     }
     // Método Inverte a cadeia
     void inverterCadeia(){
