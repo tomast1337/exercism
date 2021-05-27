@@ -1,57 +1,48 @@
 #include <iostream>
+#include <string>
+#define ESPACO '='
+// Complexidade: O(n log n) onde n é a cadeia
+void proximoArranjo(std::string cadeia, int ultimoVazio) {
+    if (cadeia[ultimoVazio + 1] != '\0' && cadeia[ultimoVazio + 1] != ESPACO) {
+        std::swap(cadeia[ultimoVazio + 1],cadeia[ultimoVazio]);
+        std::cout << cadeia << std::endl;
+        ultimoVazio++;
+        proximoArranjo(cadeia, ultimoVazio);
+    } else {
+        if (cadeia[ultimoVazio + 1] == '\0') {
+            int j ,tamanho = 1;
+            while (cadeia[ultimoVazio - tamanho] == ESPACO) tamanho++;
+            j = ultimoVazio - tamanho;
+            while (cadeia[j] != ESPACO)
+                if (j == 0) return;
+                else j--;
+            int pos = j + 2;
 
-struct Cadeia {
-    char *cadeia;
-    int tamanho;
+            std::swap(cadeia[j + 1],cadeia[j]);
 
-    Cadeia(char *cadeia, int tamanho) {
-        this->cadeia = cadeia;
-        this->tamanho = tamanho;
-    }
-};
+            std::string fim(cadeia.substr(pos, cadeia.size() - tamanho - pos));
+            std::string bloco(cadeia.substr(cadeia.size() - tamanho, tamanho));
+            cadeia.erase(pos, cadeia.size() - pos);
+            cadeia = cadeia.append(bloco + fim);
 
-void permutar(Cadeia *mascara, int tamanho, int n, Cadeia *cadeia) {
-    if (tamanho == 1) {
-        for (int i = 0,iCadeia = 0; i < n; i++) {
-            if (mascara->cadeia[i] == '#') {
-                std::cout << cadeia->cadeia[iCadeia];
-                iCadeia++;
-            } else
-                std::cout << "-";
-        }
-        std::cout << std::endl;
-        return;
-    }
-    for (int i = 0; i < tamanho; i++) {
-        permutar(mascara, tamanho - 1, n, cadeia);
-        if (tamanho % 2 == 1 && i < tamanho - 1) {
-            char aux = mascara->cadeia[i];
-            mascara->cadeia[i] = mascara->cadeia[tamanho - 1];
-            mascara->cadeia[tamanho - 1] = aux;
-        } else {
-            char aux = mascara->cadeia[i];
-            mascara->cadeia[i] = mascara->cadeia[tamanho - 1];
-            mascara->cadeia[tamanho - 1] = aux;
-        }
+            std::cout << cadeia << std::endl;
+            proximoArranjo(cadeia, j + 1 + tamanho);
+        } else return;
     }
 }
-
-void percorrer(Cadeia *cadeiaA, Cadeia *cadeiaB) {
-    if (cadeiaA->tamanho < cadeiaB->tamanho) {
-        Cadeia *aux = cadeiaA;
-        cadeiaA = cadeiaB;
-        cadeiaB = aux;
-    }
-    std::cout << "Maior Cadeia: " << cadeiaA->cadeia << std::endl;
-    std::cout << "Menor Cadeia: " << cadeiaB->cadeia << std::endl;
-    Cadeia *mascara = new Cadeia(new char[cadeiaA->tamanho], cadeiaA->tamanho);
-    for (int i = 0; i < cadeiaA->tamanho; i++) mascara->cadeia[i] = i >= cadeiaB->tamanho ? '-' : '#';
-    std::cout << "Permutação de maneiras de inserir espaço em branco:" << std::endl;
-    permutar(mascara, cadeiaA->tamanho, cadeiaA->tamanho, cadeiaB);
+// Complexidade O(n log n) onde n é o tamanho do conjunto menor mais os espaços vazios 
+void aranjoEspacos( std::string cadeiaA, std::string cadeiaB){
+    if (cadeiaA.size() < cadeiaB.size()) std::swap(cadeiaA,cadeiaB);
+    std::cout << "Maior Cadeia: " << cadeiaA << std::endl << "Menor Cadeia: " << cadeiaB << std::endl << "Arranjos das maneiras de inserir espaço em branco:" << std::endl;
+    int diferenca = cadeiaA.size() - cadeiaB.size();
+    std::string vazios(diferenca, ESPACO);
+    std::string cadeiaComVazios = vazios + cadeiaB;
+    std::cout << cadeiaComVazios << std::endl;
+    proximoArranjo(cadeiaComVazios, diferenca - 1);
 }
-
+// Complexidade: a função não tem entrada
 int main() {
-    Cadeia *cadeiaA = new Cadeia("GCTA", 4);
-    Cadeia *cadeiaB = new Cadeia("AG", 2);
-    percorrer(cadeiaB, cadeiaA);
+    std::string cadeiaA = "ATAGCTCGT";
+    std::string cadeiaB = "ACGCACATACTTGT";
+    aranjoEspacos(cadeiaA,cadeiaB);
 }
