@@ -1,12 +1,9 @@
 #include <iostream>
-void insetionSort(char *array,int tamanho){
-    for (int i = 1, j; i < tamanho; i++) {
+void insetionSort(char array[],int tamanho){
+    for (int i = 1,j; i < tamanho; i++) {
         char chave = array[i];
-        j = i - 1;
-        while (j >= 0 && array[j] > chave) {
+        for (j = i - 1; j >= 0 && array[j] > chave; j--)
             array[j + 1] = array[j];
-            j = j - 1;
-        }
         array[j + 1] = chave;
     }
 }
