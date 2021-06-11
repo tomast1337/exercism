@@ -54,10 +54,15 @@ int main() {
     // link shaders
     unsigned int shaderProgram = criarShaderProgram(shaders, 2);
 
-    float vertices[] = {
-            -0.5f, -0.5f, 0.0f, // esquerda
-            0.5f, -0.5f, 0.0f, // direita
-            0.0f, 0.5f, 0.0f  // topo
+    float quad[] = {
+
+            -0.5f, 0.5f, 0.0f, // topo esquerda
+            -0.5f, -0.5f, 0.0f, // baixo esquerda
+            0.5f, -0.5f, 0.0f, // baixo direita
+
+            -0.5f, 0.5f, 0.0f, // topo esquerda
+            0.5f, 0.5f, 0.0f,  // topo direita
+            0.5f, -0.5f, 0.0f // baixo direita
     };
 
     unsigned int VBO, VAO;
@@ -67,7 +72,7 @@ int main() {
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
@@ -93,7 +98,7 @@ int main() {
         // Desenha triangulo
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
