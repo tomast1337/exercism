@@ -56,13 +56,32 @@ int main() {
 
     float quad[] = {
 
-            -0.5f, 0.5f, 0.0f, // topo esquerda
-            -0.5f, -0.5f, 0.0f, // baixo esquerda
-            0.5f, -0.5f, 0.0f, // baixo direita
+            //quad esquerda
+            -0.9f, 0.9f, 0.0f, // topo esquerda
+            -0.9f, -0.9f, 0.0f, // baixo esquerda
+            -0.7f, -0.9f, 0.0f, // baixo direita
 
-            -0.5f, 0.5f, 0.0f, // topo esquerda
-            0.5f, 0.5f, 0.0f,  // topo direita
-            0.5f, -0.5f, 0.0f // baixo direita
+            -0.9f, 0.9f, 0.0f, // topo esquerda
+            -0.7f, 0.9f, 0.0f,  // topo direita
+            -0.7f, -0.9f, 0.0f, // baixo direita
+
+            //quad meio
+            -0.7f, 0.9f, 0.0f, // topo esquerda
+            -0.7f, 0.7f, 0.0f, // baixo esquerda
+            0.7f, -0.9f, 0.0f, // baixo direita
+
+            -0.7f, 0.9f, 0.0f, // topo esquerda
+            0.7f, -0.7f, 0.0f,  // topo direita
+            0.7f, -0.9f, 0.0f, // baixo direita
+            
+            //quad direita
+            0.9f, 0.9f, 0.0f, // topo esquerda
+            0.9f, -0.9f, 0.0f, // baixo direita
+            0.7f, -0.9f, 0.0f, // baixo esquerda
+
+            0.9f, 0.9f, 0.0f, // topo esquerda
+            0.7f, 0.9f, 0.0f,  // topo direita
+            0.7f, -0.9f, 0.0f, // baixo direita
     };
 
     unsigned int VBO, VAO;
@@ -83,7 +102,7 @@ int main() {
 
 
     // wireframe  mode
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     //loop
     while (!glfwWindowShouldClose(window)) {
@@ -98,7 +117,7 @@ int main() {
         // Desenha triangulo
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 18);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
