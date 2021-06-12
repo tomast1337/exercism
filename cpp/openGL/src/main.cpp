@@ -13,21 +13,24 @@ void processInput(GLFWwindow *window);
 #define HEIGHT 600
 
 const char *vertexShaderSource = "#version 330 core\n"
-                                 "layout (location = 0) in vec3 aPos; \n"
+                                 "layout (location = 0) in vec3 aPos;   // the position variable has attribute position 0\n"
+                                 "layout (location = 1) in vec3 aColor; // the color variable has attribute position 1\n"
+                                 "  \n"
+                                 "out vec3 minhaColor; // output a color to the fragment shader\n"
                                  "\n"
                                  "void main()\n"
                                  "{\n"
                                  "\tgl_Position = vec4(aPos, 1.0);\n"
+                                 "\tminhaColor = aColor; // set ourColor to the input color we got from the vertex data\n"
                                  "}\0";
 const char *fragmentShaderSource = "#version 330 core\n"
-                                   "out vec4 FragColor;\n"
-                                   "  \n"
-                                   "uniform vec4 minhaCor; \n"
+                                   "out vec4 FragColor;  \n"
+                                   "in vec3 minhaColor;\n"
                                    "\n"
                                    "void main()\n"
                                    "{\n"
-                                   "    FragColor = minhaCor;\n"
-                                   "}";
+                                   "\tFragColor = vec4(minhaColor, 1.0);\n"
+                                   "}\0";
 
 unsigned int compileShader(int type, const char *source);
 
@@ -61,14 +64,16 @@ int main() {
     unsigned int shaderProgram = criarShaderProgram(shaders, 2);
 
     float vertices[] = {
+            // Triangulo meio
+            // posição        // cor
+            0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,  // baixo direita
+            -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 0.0f,  // baixo esquerda
+            0.0f,  0.5f, 0.0f,  0.0f, 1.0f, 0.0f   // topo
+            // Triangulo esquerda
+            // posição        // cor
 
-            -0.5f, 0.5f, 0.0f, // topo esquerda
-            -0.5f, -0.5f, 0.0f, // baixo esquerda
-            0.5f, -0.5f, 0.0f, // baixo direita
-
-            -0.5f, 0.5f, 0.0f, // topo esquerda
-            0.5f, 0.5f, 0.0f,  // topo direita
-            0.5f, -0.5f, 0.0f // baixo direita
+            // Triangulo direita
+            // posição        // cor
     };
 
     unsigned int VBO, VAO;
@@ -80,8 +85,12 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
+    // atributo de posição
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // Atributo de cores
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -102,19 +111,9 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Desenha triangulo
-        auto timeValue = (float) glfwGetTime();
-
-        float azul = (std::sin(timeValue) / 2.0f) + 0.5f;
-        float verde = (std::cos(timeValue - 3) / 2.0f) + 0.5f;
-        float vermelho = 0.5f;
-
-        int vertexColorLocation = glGetUniformLocation(shaderProgram, "minhaCor");
         glUseProgram(shaderProgram);
-
-        glUniform4f(vertexColorLocation, vermelho, verde, azul, 1.0f);
-        
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
