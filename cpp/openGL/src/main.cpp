@@ -18,7 +18,7 @@ const char *vertexShaderSource = "#version 330 core\n"
                                  "void main()\n"
                                  "{\n"
                                  "\tgl_Position = vec4(aPos, 1.0);\n"
-                                 "\tvertexColor = vec4(0.0, 0.0, 0.5, 1.0);\n"
+                                 "\tvertexColor = gl_Position;\n"
                                  "}\0";
 const char *fragmentShaderSource = "#version 330 core\n"
                                    "out vec4 FragColor;\n"
@@ -62,9 +62,14 @@ int main() {
     unsigned int shaderProgram = criarShaderProgram(shaders, 2);
 
     float vertices[] = {
-            -0.5f, -0.5f, 0.0f, // esquerda
-            0.5f, -0.5f, 0.0f, // direita
-            0.0f, 0.5f, 0.0f  // topo
+
+            -0.5f, 0.5f, 0.0f, // topo esquerda
+            -0.5f, -0.5f, 0.0f, // baixo esquerda
+            0.5f, -0.5f, 0.0f, // baixo direita
+
+            -0.5f, 0.5f, 0.0f, // topo esquerda
+            0.5f, 0.5f, 0.0f,  // topo direita
+            0.5f, -0.5f, 0.0f // baixo direita
     };
 
     unsigned int VBO, VAO;
@@ -100,7 +105,7 @@ int main() {
         // Desenha triangulo
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
