@@ -1,7 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <cmath>
 #include <iostream>
+#include <cmath>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -13,22 +15,19 @@ void processInput(GLFWwindow *window);
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos; \n"
                                  "\n"
-                                 "out vec4 vertexColor;\n"
-                                 "\n"
                                  "void main()\n"
                                  "{\n"
                                  "\tgl_Position = vec4(aPos, 1.0);\n"
-                                 "\tvertexColor = gl_Position;\n"
                                  "}\0";
 const char *fragmentShaderSource = "#version 330 core\n"
                                    "out vec4 FragColor;\n"
-                                   "\n"
-                                   "in vec4 vertexColor; // the input variable from the vertex shader (same name and same type)  \n"
+                                   "  \n"
+                                   "uniform vec4 minhaCor; \n"
                                    "\n"
                                    "void main()\n"
                                    "{\n"
-                                   "\tFragColor = vertexColor;\n"
-                                   "}\0";
+                                   "    FragColor = minhaCor;\n"
+                                   "}";
 
 unsigned int compileShader(int type, const char *source);
 
@@ -103,7 +102,17 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Desenha triangulo
+        auto timeValue = (float) glfwGetTime();
+
+        float azul = (std::sin(timeValue) / 2.0f) + 0.5f;
+        float verde = (std::cos(timeValue - 3) / 2.0f) + 0.5f;
+        float vermelho = 0.5f;
+
+        int vertexColorLocation = glGetUniformLocation(shaderProgram, "minhaCor");
         glUseProgram(shaderProgram);
+
+        glUniform4f(vertexColorLocation, vermelho, verde, azul, 1.0f);
+        
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
