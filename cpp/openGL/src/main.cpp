@@ -11,24 +11,24 @@ void processInput(GLFWwindow *window);
 #define HEIGHT 600
 
 const char *vertexShaderSource = "#version 330 core\n"
-                                 "layout (location = 0) in vec3 aPos;\n"
+                                 "layout (location = 0) in vec3 aPos; \n"
+                                 "\n"
+                                 "out vec4 vertexColor;\n"
+                                 "\n"
                                  "void main()\n"
                                  "{\n"
-                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                                 "\tgl_Position = vec4(aPos, 1.0);\n"
+                                 "\tvertexColor = vec4(0.0, 0.0, 0.5, 1.0);\n"
                                  "}\0";
-const char *fragmentShaderSourceOrange = "#version 330 core\n"
-                                         "out vec4 FragColor;\n"
-                                         "void main()\n"
-                                         "{\n"
-                                         "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                         "}\n\0";
-
-const char *fragmentShaderSourceYellow = "#version 330 core\n"
-                                         "out vec4 FragColor;\n"
-                                         "void main()\n"
-                                         "{\n"
-                                         "   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-                                         "}\n\0";
+const char *fragmentShaderSource = "#version 330 core\n"
+                                   "out vec4 FragColor;\n"
+                                   "\n"
+                                   "in vec4 vertexColor; // the input variable from the vertex shader (same name and same type)  \n"
+                                   "\n"
+                                   "void main()\n"
+                                   "{\n"
+                                   "\tFragColor = vertexColor;\n"
+                                   "}\0";
 
 unsigned int compileShader(int type, const char *source);
 
@@ -52,77 +52,35 @@ int main() {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
-    unsigned int shadersMeio[2];
+    unsigned int shaders[2];
     // vertex shader
-    shadersMeio[0] = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
+    shaders[0] = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
     // fragment shader
-    shadersMeio[1] = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSourceYellow);
+    shaders[1] = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 
-    // link shadersLaterais
-    unsigned int shaderPrograMeio = criarShaderProgram(shadersMeio, 2);
+    // link shaders
+    unsigned int shaderProgram = criarShaderProgram(shaders, 2);
 
-
-    float quadMeio[] = {
-            //quad meio
-            -0.7f, 0.9f, 0.0f, // topo esquerda
-            -0.7f, 0.7f, 0.0f, // baixo esquerda
-            0.7f, -0.9f, 0.0f, // baixo direita
-
-            -0.7f, 0.9f, 0.0f, // topo esquerda
-            0.7f, -0.7f, 0.0f,  // topo direita
-            0.7f, -0.9f, 0.0f // baixo direita
+    float vertices[] = {
+            -0.5f, -0.5f, 0.0f, // esquerda
+            0.5f, -0.5f, 0.0f, // direita
+            0.0f, 0.5f, 0.0f  // topo
     };
 
-    unsigned int shadersLaterais[2];
-    // vertex shader
-    shadersLaterais[0] = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
-    // fragment shader
-    shadersLaterais[1] = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSourceOrange);
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
 
-    // link shadersLaterais
-    unsigned int shaderProgramLateral = criarShaderProgram(shadersLaterais, 2);
+    glBindVertexArray(VAO);
 
-    float quadsLaterais[] = {
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-            //quad esquerda
-            -0.9f, 0.9f, 0.0f, // topo esquerda
-            -0.9f, -0.9f, 0.0f, // baixo esquerda
-            -0.7f, -0.9f, 0.0f, // baixo direita
-
-            -0.9f, 0.9f, 0.0f, // topo esquerda
-            -0.7f, 0.9f, 0.0f,  // topo direita
-            -0.7f, -0.9f, 0.0f, // baixo direita
-
-            //quad direita
-            0.9f, 0.9f, 0.0f, // topo esquerda
-            0.9f, -0.9f, 0.0f, // baixo direita
-            0.7f, -0.9f, 0.0f, // baixo esquerda
-
-            0.9f, 0.9f, 0.0f, // topo esquerda
-            0.7f, 0.9f, 0.0f,  // topo direita
-            0.7f, -0.9f, 0.0f, // baixo direita
-    };
-
-    unsigned int VBOs[2], VAOs[2];
-    glGenVertexArrays(2, VAOs);
-    glGenBuffers(2, VBOs);
-
-    // quads laterais
-    glBindVertexArray(VAOs[0]);
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(quadsLaterais), quadsLaterais, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
-    glEnableVertexAttribArray(0);
-
-    // quad meio
-    glBindVertexArray(VAOs[1]);
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(quadMeio), quadMeio, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     glBindVertexArray(0);
 
 
@@ -139,23 +97,20 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Desenha quad laterais
-        glUseProgram(shaderProgramLateral);
-        glBindVertexArray(VAOs[0]);
-        glDrawArrays(GL_TRIANGLES, 0, 12);
-        // Desenhar quad meio
-        glUseProgram(shaderPrograMeio);
-        glBindVertexArray(VAOs[1]);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // Desenha triangulo
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
 
-    glDeleteVertexArrays(2, VAOs);
-    glDeleteBuffers(2, VBOs);
-    glDeleteProgram(shaderProgramLateral);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
+
 
     glfwTerminate();
     return 0;
