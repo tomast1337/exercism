@@ -76,7 +76,13 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Desenha triangulo
+
+
         shader->use();
+        shader->setFloat("xOffset",0.1f);
+        shader->setFloat("yOffset",0.1f);
+        shader->setFloat("scale",(float)(-0.2*std::sin(glfwGetTime())+1));
+        shader->setFloat("colorShift",0.5f*(float)(0.2*std::cos(glfwGetTime()+1)));
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
