@@ -4,9 +4,6 @@
 
 #include "Shader.h"
 
-unsigned int compileShader(int type, const char *source);
-
-unsigned int criarShaderProgram(unsigned int vertex, unsigned int fragment);
 
 Shader::Shader(const char *vertexPath, const char *fragmentPath) {
     std::ifstream vertexFile, fragmentFile;
