@@ -12,7 +12,8 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/glad.c
         src/Shader.h
-        src/Shader.cpp)
+        src/Shader.cpp
+        src/stb_image.h)
 
 
 target_link_libraries( ${PROJECT_NAME}
