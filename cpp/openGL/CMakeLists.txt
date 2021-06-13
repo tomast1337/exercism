@@ -8,7 +8,11 @@ include_directories( ${OPENGL_INCLUDE_DIRS} )
 #glfw
 find_package(glfw3 REQUIRED)
 
-add_executable(${PROJECT_NAME} src/main.cpp src/glad.c)
+add_executable(${PROJECT_NAME}
+        src/main.cpp
+        src/glad.c
+        src/Shader.h
+        src/Shader.cpp)
 
 
 target_link_libraries( ${PROJECT_NAME}
