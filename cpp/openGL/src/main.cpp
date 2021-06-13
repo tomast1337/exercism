@@ -37,7 +37,7 @@ int main() {
     auto *shader = new Shader("../shaders/vertex.vert\0", "../shaders/fragment.frag\0");
 
     float vertices[] = {
-            // Posição         // cores           // Posição textura
+            // Posição         // cores           // Posição textura1
             0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
             0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
@@ -71,9 +71,9 @@ int main() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    unsigned int textura;
-    glGenTextures(1, &textura);
-    glBindTexture(GL_TEXTURE_2D, textura);
+    unsigned int textura1, textura2;
+    glGenTextures(1, &textura1);
+    glBindTexture(GL_TEXTURE_2D, textura1);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -82,6 +82,7 @@ int main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int width, height, nrChannels;
+    stbi_set_flip_vertically_on_load(true);
     unsigned char *data = stbi_load("../texturas/container.jpg", &width, &height, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -90,6 +91,31 @@ int main() {
         std::cout << "Falha ao carregar texturas" << std::endl;
     }
     stbi_image_free(data);
+
+    glGenTextures(1, &textura2);
+    glBindTexture(GL_TEXTURE_2D, textura2);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                    GL_REPEAT);    // set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    data = stbi_load("../texturas/awesomeface.png", &width, &height, &nrChannels, 0);
+    if (data) {
+        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        std::cout << "Falha ao carregar texturas" << std::endl;
+    }
+    stbi_image_free(data);
+
+    shader->use();
+    glUniform1i(glGetUniformLocation(shader->ID, "textura1"), 0);
+    shader->setInt("textura2", 1);
+
     // wireframe  mode
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -103,7 +129,10 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBindTexture(GL_TEXTURE_2D, textura);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textura1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, textura2);
 
 
         shader->use();
