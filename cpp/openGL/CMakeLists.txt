@@ -3,8 +3,8 @@ project(openGL)
 set(CMAKE_CXX_STANDARD 14)
 
 # OpenGl
-find_package( OpenGL REQUIRED )
-include_directories( ${OPENGL_INCLUDE_DIRS} )
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIRS})
 #glfw
 find_package(glfw3 REQUIRED)
 
@@ -16,8 +16,12 @@ add_executable(${PROJECT_NAME}
         src/stb_image.h)
 
 
-target_link_libraries( ${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}
         PUBLIC
         ${OPENGL_LIBRARIES}
         glfw
         )
+
+# glm
+add_subdirectory(lib/glm EXCLUDE_FROM_ALL)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm)

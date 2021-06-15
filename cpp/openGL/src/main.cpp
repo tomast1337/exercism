@@ -3,6 +3,9 @@
 #include <cmath>
 #include <iostream>
 #include "Shader.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 
@@ -38,10 +41,10 @@ int main() {
 
     float vertices[] = {
             // Posição         // cores           // Posição textura1
-            0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // top right
-            0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 1.0f, 0.0f, // bottom right
-            -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // bottom left
-            -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.0f, 1.0f  // top left
+            0.2f, 0.2f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // top right
+            0.2f, -0.2f, 0.0f, 0.5f, 0.5f, 0.5f, 1.0f, 0.0f, // bottom right
+            -0.2f, -0.2f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // bottom left
+            -0.2f, 0.2f, 0.0f, 0.5f, 0.5f, 0.5f, 0.0f, 1.0f  // top left
     };
     unsigned int indices[] = {
             0, 1, 3, // first triangle
@@ -134,12 +137,19 @@ int main() {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, textura2);
 
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::translate(transform, glm::vec3((float) (std::cos(glfwGetTime())) * 0.5f,
+                                                        (float) (std::sin(glfwGetTime())) * 0.5f,
+                                                        (float) (std::sin(glfwGetTime())) * 0.5f));
+        transform = glm::rotate(transform, (float) (std::sin(glfwGetTime())) * 0.5f, glm::vec3(0.0f, 0.0f, 1.0f));
+
 
         shader->use();
+        unsigned int transformLoc = glGetUniformLocation(shader->ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+        shader->setFloat("scale", 0.5f);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        shader->setFloat("scale",(float)(-0.2*std::sin(glfwGetTime())+1));
-        shader->setFloat("verticalTrasform",(float)std::cos(glfwGetTime()));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -148,15 +158,19 @@ int main() {
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 
     glfwTerminate();
     return 0;
 }
 
+static unsigned char wireframe;
 
 void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        glPolygonMode(GL_FRONT_AND_BACK, (wireframe = 1 - wireframe) ? GL_LINE : GL_FILL);
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
