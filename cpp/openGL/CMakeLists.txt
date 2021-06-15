@@ -10,10 +10,11 @@ find_package(glfw3 REQUIRED)
 
 add_executable(${PROJECT_NAME}
         src/main.cpp
-        src/glad.c
+        src/glad/glad.c
         src/Shader.h
         src/Shader.cpp
-        src/stb_image.h)
+        src/stb_image.h
+        src/Texture.cpp src/Texture.h)
 
 
 target_link_libraries(${PROJECT_NAME}
