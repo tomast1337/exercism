@@ -6,7 +6,7 @@ class Texture {
 private:
     unsigned int texture;
 public:
-    explicit Texture(const char *texture_path,int type);
+    explicit Texture(const char *texture_path,int type,int RGBType);
 
     unsigned int GetTexture();
 };
