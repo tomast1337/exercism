@@ -155,7 +155,7 @@ int main() {
         glm::mat4 projection = glm::mat4(1.0f);
 
         projection = glm::perspective(glm::radians((float) (20.0 * std::sin(glfwGetTime()) + 70.0)),
-                                      (float) WIDTH / (float) HEIGHT,
+                                      (float) 16 / (float) 9,
                                       0.1f,
                                       100.0f);
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
